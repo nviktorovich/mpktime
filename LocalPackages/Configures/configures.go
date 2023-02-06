@@ -12,5 +12,7 @@ var (
 	ShN              = "203"
 	User             = "root"
 	Pass             = "crtc"
-	CommandDate      = "date +%T --set='09:00:00'"
+	CommandDate      = "date +%T --set="
+
+	// CommandDate      = "date +%T --set='%s:%s:00'"
 )
