@@ -3,7 +3,6 @@ package fileparser
 import (
 	"os"
 	"regexp"
-	"strings"
 )
 
 // Parse функция, которая принимает на вход путь к файлу с конфигурацией
@@ -46,14 +45,14 @@ func GetMatches(src []byte, pattern string) ([]string, error) {
 // необходимую строку из списка ipMatches, разбивает эту строку, отбрасывает последний
 // октет и собираета новый список путем склеивания между собой префикса и параметров,
 // которые были отправлени в списке hosts
-func GetHosts(ipMatches []string, hosts ...string) []string {
-	addrAndIpStr := strings.Split(ipMatches[0], " ")
-	ipStr := addrAndIpStr[len(addrAndIpStr)-1]
-	netOctets := strings.Split(ipStr, ".")
-	hostsList := [3]string{}
-	for i, v := range hosts {
-		hostsList[i] = strings.Join(netOctets[:3], ".") + "." + v
-	}
+// func GetHosts(ipMatches []string, hosts ...string) []string {
+// 	addrAndIpStr := strings.Split(ipMatches[0], " ")
+// 	ipStr := addrAndIpStr[len(addrAndIpStr)-1]
+// 	netOctets := strings.Split(ipStr, ".")
+// 	hostsList := [3]string{}
+// 	for i, v := range hosts {
+// 		hostsList[i] = strings.Join(netOctets[:3], ".") + "." + v
+// 	}
 
-	return hostsList[:]
-}
+// 	return hostsList[:]
+// }

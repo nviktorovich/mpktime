@@ -17,7 +17,7 @@ func GetInput() (string, string) {
 	color.Cyan("Введите часы и минуты в формате ЧЧ ММ и нажмите Enter\n")
 	fmt.Scanf("%s %s", &hh, &mm)
 
-	if checkDigits(hh) && checkDigits(mm) {
+	if checkHours(hh) && checkMinutes(mm) {
 		fmt.Println("вы ввели:", hh, mm)
 
 	} else {
@@ -29,10 +29,25 @@ func GetInput() (string, string) {
 
 }
 
-func checkDigits(s string) bool {
-	_, err := strconv.Atoi(s)
+func checkHours(s string) bool {
+	HH, err := strconv.Atoi(s)
 	if err != nil {
 		log.Print(err)
+		return false
+	}
+	if (HH < 0) || (HH > 24) {
+		return false
+	}
+	return true
+}
+
+func checkMinutes(s string) bool {
+	MM, err := strconv.Atoi(s)
+	if err != nil {
+		log.Print(err)
+		return false
+	}
+	if (MM < 0) || (MM > 59) {
 		return false
 	}
 	return true

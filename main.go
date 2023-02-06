@@ -18,8 +18,9 @@ func main() {
 
 	newTime := fmt.Sprintf("'%s:%s:00'", hh, mm)
 	CommandDate := fmt.Sprint(cfg.CommandDate + newTime)
+	commands := []string{CommandDate}
 
-	data, err := fp.Parse(cfg.PathToInterfaces)
+	data, err := fp.Parse(cfg.PathToHosts)
 	if err != nil {
 		fmt.Println("ошибка чтения конфигурационного файла")
 		log.Fatalln(err)
@@ -32,14 +33,13 @@ func main() {
 	}
 
 	if matched {
-		match, err := fp.GetMatches(data, cfg.Pattern)
+		hostsList, err := fp.GetMatches(data, cfg.Pattern)
 		if err != nil {
 			fmt.Println("ошибка извлечения значения сетевых настроек")
 			log.Fatalln(err)
 		}
 
-		hostsList := fp.GetHosts(match, cfg.DspA, cfg.DspB, cfg.ShN)
-		cn.ConnectionOperator(hostsList, cfg.Port, CommandDate, cfg.User, cfg.Pass)
+		cn.ConnectionOperator(hostsList, commands, cfg.Port, cfg.User, cfg.Pass)
 
 	} else {
 		fmt.Println("отсутствуют сетевые настройки")

@@ -10,7 +10,7 @@ import (
 // ConnectionOperator принимает список хостов, порт, команду, логин и пароль
 // для реализации на удаленной машине создает канал для опроса состояния хостов и запускает
 // несколько параллельных процессов
-func ConnectionOperator(hosts []string, port, cmd, login, pswd string) {
+func ConnectionOperator(hosts, cmd []string, port, login, pswd string) {
 
 	statusChan := make(chan string, len(hosts))
 
@@ -27,7 +27,7 @@ func ConnectionOperator(hosts []string, port, cmd, login, pswd string) {
 }
 
 // sshConnection предназначена для реализации команд на удаленном хосте
-func sshConnection(ip, port, login, pass, command string, statChan chan<- string) {
+func sshConnection(ip, port, login, pass string, commands []string, statChan chan<- string) {
 
 	ipWithPort := fmt.Sprintf("%s:%s", ip, port)
 	_, err := net.Dial("tcp", ipWithPort)
@@ -47,14 +47,16 @@ func sshConnection(ip, port, login, pass, command string, statChan chan<- string
 	defer client.Close()
 
 	// run one command
+	for _, command := range commands {
+		out, err := client.Cmd(command).SmartOutput()
+		if err != nil {
+			err = fmt.Errorf("ошибка выполнения команды: %s на хосте %s\nОтвет хоста (out): %s.\nerr(%s)", command, ipWithPort, out, err)
+			statChan <- fmt.Sprintf("сообщение об ошибке: %s", err)
+		}
+		// the 'out' is stdout output
 
-	out, err := client.Cmd(command).SmartOutput()
-	if err != nil {
-		err = fmt.Errorf("ошибка выполнения команды: %s на хосте %s\nОтвет хоста (out): %s.\nerr(%s)", command, ipWithPort, out, err)
-		statChan <- fmt.Sprintf("сообщение об ошибке: %s", err)
+		fmt.Println(string(out))
 	}
-	// the 'out' is stdout output
 
-	fmt.Println(string(out))
 	statChan <- fmt.Sprintf("работа на хосте: %s завершена\n", ipWithPort)
 }
