@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	hh, mm := ui.GetInput()
+	hh, mm := ui.UserDialog()
 
 	newTime := fmt.Sprintf("'%s:%s:00'", hh, mm)
 	CommandDate := fmt.Sprint(cfg.CommandDate + newTime)
