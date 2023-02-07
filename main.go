@@ -18,6 +18,8 @@ func main() {
 
 	newTime := fmt.Sprintf("'%s:%s:00'", hh, mm)
 	CommandDate := fmt.Sprint(cfg.CommandDate + newTime)
+
+	// commands список в который можно добавлять команды для исполнения
 	commands := []string{CommandDate}
 
 	data, err := fp.Parse(cfg.PathToHosts)
@@ -26,23 +28,14 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	matched, err := fp.CheckMatches(data, cfg.Pattern)
-	if err != nil {
-		fmt.Println("ошибка, в конфигурационном файле не обнаружены настройки сети")
-		log.Fatalln(err)
-	}
+	hostsList := fp.GetMatches(data, cfg.Pattern)
 
-	if matched {
-		hostsList, err := fp.GetMatches(data, cfg.Pattern)
-		if err != nil {
-			fmt.Println("ошибка извлечения значения сетевых настроек")
-			log.Fatalln(err)
-		}
+	if len(hostsList) > 0 {
 
 		cn.ConnectionOperator(hostsList, commands, cfg.Port, cfg.User, cfg.Pass)
 
 	} else {
-		fmt.Println("отсутствуют сетевые настройки")
+		fmt.Println("отсутствуют хосты в файле: ", cfg.PathToHosts)
 		os.Exit(1)
 	}
 	time.Sleep(20 * time.Second)

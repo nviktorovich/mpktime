@@ -35,7 +35,7 @@ func checkHours(s string) bool {
 		log.Print(err)
 		return false
 	}
-	if (HH < 0) || (HH > 24) {
+	if (HH < 0) || (HH > 23) {
 		return false
 	}
 	return true
