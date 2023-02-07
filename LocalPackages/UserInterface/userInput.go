@@ -13,7 +13,7 @@ import (
 func GetInput() (string, string) {
 
 	var hh, mm string
-
+	color.Magenta("'ksa' корректировка времени.\n\n")
 	color.Cyan("Введите часы и минуты в формате ЧЧ ММ и нажмите Enter\n")
 	fmt.Scanf("%s %s", &hh, &mm)
 
